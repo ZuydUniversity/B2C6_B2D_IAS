@@ -42,4 +42,4 @@ jobs:
         run: pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 
       - name: Run Ansible playbook
-        run: ansible-playbook playbook/test.yml 
+        run: ansible-playbook Playbook/test.yml 
