@@ -49,5 +49,10 @@ jobs:
       - name: Azure Login 
         run: az login --service-principal --username 8cf2ed0e-9a0f-4fb5-aaa7-9514f4f8848a --password pk28Q~RWw7qOUdOTxzOGRWAQjvdWW-e.~RKGGbkz --tenant 586e785a-8271-4fc6-a0c4-59fec8a68975
 
-      - name: Run Ansible playbook
-        run: ansible-playbook Playbook/test.yml 
+      - name: Create VMsssss
+        run: |
+          cd playbooks/
+          ansible-playbook create_vm.yml
+
+      #- name: Run Ansible playbook
+       # run: ansible-playbook Playbook/test.yml 
