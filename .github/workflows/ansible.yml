@@ -52,7 +52,7 @@ jobs:
       - name: Create VMsssss
         run: |
           mkdir /home/runner/.ssh
-          cd playbooks/
+          cd Playbook/
           ansible-playbook create_vm.yml
 
       #- name: Run Ansible playbook
