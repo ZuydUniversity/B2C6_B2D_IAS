@@ -1,1 +1,43 @@
+- name: Install Packages and Setup Front-end
+  hosts: localhost
+  become: true  # Zorg ervoor dat we root- of admin-rechten hebben om taken uit te voeren
 
+  tasks:
+    - name: Install npm
+      command: sudo npm install -g n
+
+    - name: Install Node.js LTS version
+      command: sudo n lts
+
+    - name: Set Node.js path
+      lineinfile:
+        path: /etc/profile
+        line: 'export PATH=/usr/local/n/versions/node/20.14.0/bin:$PATH'
+        create: yes
+
+    - name: Clone GitHub repository
+      git:
+        repo: https://github.com/ZuydUniversity/B2C6_B2D_Frontend.git
+        dest: /opt/B2C6_B2D_Frontend
+        force: yes
+
+    - name: Install PM2
+      npm:
+        path: /opt/B2C6_B2D_Frontend
+        name: pm2
+        global: yes
+
+    - name: Install production dependencies
+      npm:
+        path: /opt/B2C6_B2D_Frontend
+        production: yes
+
+    - name: Build front-end application
+      npm:
+        path: /opt/B2C6_B2D_Frontend
+        script: build
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
