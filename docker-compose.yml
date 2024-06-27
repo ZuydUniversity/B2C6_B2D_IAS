@@ -1,0 +1,20 @@
+services:
+  frontend:
+    hostname: "frontend.local"
+    build: https://github.com/ZuydUniversity/B2C6_B2D_Frontend.git
+    depends_on:
+      - "backend"
+    ports:
+      - "3000:3000"
+  backend:
+    hostname: "backend.local"
+    build: https://github.com/ZuydUniversity/B2C6_B2D_Backend.git
+    depends_on:
+      - "mariadb"
+    ports:
+      - "8000:8000"
+  mariadb:
+    hostname: "mariadb.local"
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
