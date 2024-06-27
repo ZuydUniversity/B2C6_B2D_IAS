@@ -1,18 +1,21 @@
 services:
   frontend:
     hostname: "frontend.local"
-    build: https://github.com/ZuydUniversity/B2C6_B2D_Frontend.git
+    build: https://github.com/ZuydUniversity/B2C6_B2D_Frontend.git#groep-2
     depends_on:
       - "backend"
     ports:
       - "3000:3000"
   backend:
     hostname: "backend.local"
-    build: https://github.com/ZuydUniversity/B2C6_B2D_Backend.git
+    build: https://github.com/ZuydUniversity/B2C6_B2D_Backend.git#Groep-2
+    restart: always  # fix when mariadb hasn't started listening and backend crashes
     depends_on:
       - "mariadb"
     ports:
       - "8000:8000"
+    environment:
+      - DB_URL=mysql+pymysql://root:admin@mariadb.local:3306/Zorgdb
   mariadb:
     hostname: "mariadb.local"
     image: mariadb:latest
