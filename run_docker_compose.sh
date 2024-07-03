@@ -1,3 +1,4 @@
+# ==== DOCKER INSTALL ====
 # https://docs.docker.com/engine/install/debian/
 
 # Add Docker's official GPG key:
@@ -16,3 +17,11 @@ echo \
 # install docker packages
 sudo apt-get update -y
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+
+# ==== DOCKER RUN ====
+
+# build containers (remove after usage)
+docker compose build --force-rm
+
+# run containers
+docker compose up
