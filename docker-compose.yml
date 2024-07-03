@@ -1,4 +1,12 @@
 services:
+  nginx:
+    hostname: "nginx.local"
+    build: "./containers/nginx"
+    ports:
+      - "80:80"  # HTTP port forward
+      - "443:443"  # HTTPS port forward
+    depends_on:
+      - "frontend"
   frontend:
     hostname: "frontend.local"
     build: https://github.com/ZuydUniversity/B2C6_B2D_Frontend.git#groep-2
