@@ -11,7 +11,7 @@ env:
   REMOTE_PASSWORD: "92ijetWDPi3yU4KkcUakuDmHZP6DLgps948KETSJuTmxNLurJxw7bRg4nMTtkqmqrW9VKubc"
 
 jobs:
-  run_on_ssh:
+  run_docker_via_ssh:
     runs-on: ubuntu-latest
     steps:
         - uses: appleboy/ssh-action@v1.0.3
