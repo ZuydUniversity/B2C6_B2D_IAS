@@ -1,24 +1,39 @@
-# ==== DOCKER INSTALL ====
-# https://docs.docker.com/engine/install/debian/
+#!/bin/bash
 
-# Add Docker's official GPG key:
-sudo apt-get update -y
-sudo apt-get install ca-certificates curl -y
-sudo install -m 0755 -d /etc/apt/keyrings
-sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+function docker_do_install {
+  # https://docs.docker.com/engine/install/debian/
 
-# Add the repository to Apt sources:
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  # Add Docker's official GPG key:
+  sudo apt-get update -y
+  sudo apt-get install ca-certificates curl -y
+  sudo install -m 0755 -d /etc/apt/keyrings
+  sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+  sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# install docker packages
-sudo apt-get update -y
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+  # Add the repository to Apt sources:
+  echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-# ==== DOCKER RUN ====
+  # install docker packages
+  sudo apt-get update -y
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+}
+
+function docker_install {
+  docker
+
+  # if docker not found (exit code 127), do install
+  if [ $? -eq 127 ]; then
+    docker_do_install
+  fi
+}
 
 # build & run containers in background
-sudo docker compose up --build --detach
+function docker_compose_run {
+  sudo docker compose up --build --detach
+}
+
+docker_install
+docker_compose_run
