@@ -35,7 +35,7 @@ jobs:
 
   notify:
     runs-on: ubuntu-20.04
-    needs: run_on_ssh
+    needs: run_docker_via_ssh
     if: ${{ always() }}
     steps:
       - uses: slackapi/slack-github-action@v1.26.0
