@@ -26,12 +26,17 @@ function docker_install {
 
   # if docker not found (exit code 127), do install
   if [ $? -eq 127 ]; then
+    echo "[*] installing docker"
     docker_do_install
+    echo "[+] installed docker"
+  else
+    echo "[+] docker installation found"
   fi
 }
 
 # build & run containers in background
 function docker_compose_run {
+  echo "[*] running docker compose"
   sudo docker compose up --build --detach
 }
 

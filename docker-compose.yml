@@ -4,7 +4,6 @@ services:
     build: "./containers/nginx"
     restart: always  # fix when mariadb hasn't started listening and backend crashes
     ports:
-      - "80:80"  # HTTP port forward
       - "443:443"  # HTTPS port forward
     depends_on:
       - "frontend"
