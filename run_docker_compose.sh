@@ -20,8 +20,5 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 # ==== DOCKER RUN ====
 
-# build containers (remove after usage)
-sudo docker compose build --force-rm
-
-# run containers
-sudo docker compose up
+# build & run containers in background
+sudo docker compose up --build --detach
