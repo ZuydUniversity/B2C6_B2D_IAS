@@ -16,6 +16,7 @@ ansible_install() {
     pip install ansible[azure]
     pip install packaging
     ansible-galaxy collection install azure.azcollection
+    pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 }
 
 ansible_run() {
