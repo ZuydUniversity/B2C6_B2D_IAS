@@ -14,7 +14,7 @@ ansible_install() {
 }
 
 ansible_run() {
-    ansible-playbook Playbooks/azure/vm_create.yml -e "ansible_python_interpreter=$1/bin/python3"
+    ansible-playbook Playbooks/azure/vm_create.yml
 }
 
 export VENV_PATH="/tmp/ansible-venv"
