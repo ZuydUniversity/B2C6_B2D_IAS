@@ -13,7 +13,7 @@ ansible_install() {
     #pipx inject ansible packaging
     #ansible-galaxy collection install azure.azcollection
 
-    pip install ansible
+    pip install ansible[azure]
     pip install packaging
     ansible-galaxy collection install azure.azcollection
 }
