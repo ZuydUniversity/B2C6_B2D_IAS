@@ -10,11 +10,12 @@ ansible_install() {
     #sudo apt install ansible
 
     pipx install --include-deps ansible[azure]
+    pipx install packaging
     ansible-galaxy collection install azure.azcollection
 }
 
 ansible_run() {
-    ansible-playbook Playbooks/azure/vm_create.yml
+    ansible-playbook Playbooks/azure/vm_create.yml -e "ansible_python_interpreter=$1/bin/python3"
 }
 
 export VENV_PATH="/tmp/ansible-venv"
