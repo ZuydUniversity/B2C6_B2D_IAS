@@ -1,26 +1,17 @@
-# debian 12 ansible install
-
 ansible_install() {
-    # add ansible apt repo
-    #wget -O- "https://keyserver.ubuntu.com/pks/lookup?fingerprint=on&op=get&search=0x6125E2A8C77F2818FB7BD15B93C4A3FD7BB9C367" | sudo gpg --dearmour -o /usr/share/keyrings/ansible-archive-keyring.gpg
-    #echo "deb [signed-by=/usr/share/keyrings/ansible-archive-keyring.gpg] http://ppa.launchpad.net/ansible/ansible/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/ansible.list
-    #sudo apt update
-    
-    # install ansible
-    #sudo apt install ansible
-
-    #pipx install --include-deps ansible[azure]
-    #pipx inject ansible packaging
-    #ansible-galaxy collection install azure.azcollection
+    # debian 12 ansible install
 
     pip install ansible[azure]
     pip install packaging
     ansible-galaxy collection install azure.azcollection --force
-    find ~/.ansible
     pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
 }
 
-ansible_run() {
+azure_login() {
+    az login --service-principal --username $1 --password $2 --tenant $3
+}
+
+ansible_run_az_create_vm() {
     ansible-playbook Playbooks/azure/vm_create.yml -e "ansible_python_interpreter=$1/bin/python3"
 }
 
@@ -30,4 +21,5 @@ python3 -m venv $VENV_PATH
 source "$VENV_PATH/bin/activate"
 
 ansible_install
-ansible_run $VENV_PATH
+azure_login 8cf2ed0e-9a0f-4fb5-aaa7-9514f4f8848a 'pk28Q~RWw7qOUdOTxzOGRWAQjvdWW-e.~RKGGbkz' 586e785a-8271-4fc6-a0c4-59fec8a68975
+ansible_run_az_create_vm $VENV_PATH
