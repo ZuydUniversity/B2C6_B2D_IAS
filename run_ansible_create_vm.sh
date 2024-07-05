@@ -9,12 +9,17 @@ ansible_install() {
     # install ansible
     sudo apt install ansible
 
-    pipx install ansible[azure]
+    pip install ansible[azure] --include-deps
 }
 
 ansible_run() {
-    ansible-playbook Playbooks/azure/vm_create.yml
+    ansible-playbook Playbooks/azure/vm_create.yml -e "ansible_python_interpreter=$1/bin/python3"
 }
 
+export VENV_PATH="/tmp/ansible-venv"
+
+python3 -m venv $VENV_PATH
+source "$VENV_PATH/bin/activate"
+
 ansible_install
-ansible_run
+ansible_run $VENV_PATH
