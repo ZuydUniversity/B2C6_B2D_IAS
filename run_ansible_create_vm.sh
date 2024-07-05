@@ -10,7 +10,7 @@ ansible_install() {
     #sudo apt install ansible
 
     pipx install --include-deps ansible[azure]
-    pipx install packaging
+    pipx inject ansible packaging
     ansible-galaxy collection install azure.azcollection
 }
 
