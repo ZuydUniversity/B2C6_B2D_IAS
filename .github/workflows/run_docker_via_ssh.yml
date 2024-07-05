@@ -1,0 +1,60 @@
+name: run_docker_via_ssh
+
+on:
+  workflow_call:
+  push:
+  
+env:
+  LOCAL_DIST: "/tmp/dist"
+  REMOTE_HOST: "98.71.161.86"
+  REMOTE_USER: "azureuser" 
+  REMOTE_PASSWORD: "92ijetWDPi3yU4KkcUakuDmHZP6DLgps948KETSJuTmxNLurJxw7bRg4nMTtkqmqrW9VKubc"
+
+jobs:
+  run_docker_via_ssh:
+    runs-on: ubuntu-latest
+    steps:
+        - uses: appleboy/ssh-action@v1.0.3
+          with:
+            host: ${{ env.REMOTE_HOST }}
+            username: ${{ env.REMOTE_USER }}
+            password: ${{ env.REMOTE_PASSWORD }}
+            script: |
+              git clone https://github.com/ZuydUniversity/B2C6_B2D_IAS --depth 1 --branch groep-2
+              cd B2C6_B2D_IAS
+              git pull  # pull updates if repo already exists (this vm is persistant)
+
+              # run docker: rebuild images if there's updates and run em
+              bash ./run_docker_compose.sh
+            
+              # get ip
+              echo "[+] hosting website on http://${{ env.REMOTE_HOST }}:8000"
+
+              # stop ssh session (complete workflow step)
+              exit
+
+  notify:
+    runs-on: ubuntu-20.04
+    needs: run_docker_via_ssh
+    if: ${{ always() }}
+    steps:
+      - uses: slackapi/slack-github-action@v1.26.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GH workflow `run_on_ssh`: <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|${{ needs.run_on_ssh.result }}>"
+                  }
+                }
+              ]
+            }
+
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.GROEP_2_SLACK_WEBHOOK }}
+      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK"
