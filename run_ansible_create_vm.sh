@@ -9,7 +9,7 @@ ansible_install() {
     # install ansible
     sudo apt install ansible
 
-    pip install ansible[azure]
+    pipx install ansible[azure]
 }
 
 ansible_run() {
