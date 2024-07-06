@@ -14,12 +14,12 @@ jobs:
     uses: ./.github/workflows/send_slack_webhook.yml
     secrets: inherit
     with:
-      SLACK_WEBHOOK_TEXT: ":rotating_light: [BACKEND] deploy: FAILED, commit info: <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|url>, workflow info: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|url> :rotating_light:"
+      SLACK_WEBHOOK_TEXT: ":rotating_light: [IAS] deploy: FAILED, commit info: <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|url>, workflow info: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|url> :rotating_light:"
   deploy-success-notify:
     needs: deploy
     if: ${{ success() }}
     uses: ./.github/workflows/send_slack_webhook.yml
     secrets: inherit
     with:
-      SLACK_WEBHOOK_TEXT: ":white_check_mark: [BACKEND] deploy: SUCCEEDED, commit info: <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|url>, workflow info: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|url> :white_check_mark:"
+      SLACK_WEBHOOK_TEXT: ":white_check_mark: [IAS] deploy: SUCCEEDED, commit info: <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|url>, workflow info: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|url> :white_check_mark:"
     
