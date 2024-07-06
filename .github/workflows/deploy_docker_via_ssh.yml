@@ -2,12 +2,13 @@ name: run_docker_via_ssh
 
 on:
   workflow_call:
-  
-env:
-  LOCAL_DIST: "/tmp/dist"
-  REMOTE_HOST: "4.180.53.191"
-  REMOTE_USER: "azureuser" 
-  REMOTE_PASSWORD: "92ijetWDPi3yU4KkcUakuDmHZP6DLgps948KETSJuTmxNLurJxw7bRg4nMTtkqmqrW9VKubc"
+    secrets:
+      GROEP_2_DEPLOYMENT_VM_IP:
+        required: true
+      GROEP_2_DEPLOYMENT_VM_USER:
+        required: true
+      GROEP_2_DEPLOYMENT_VM_PASSWORD:
+        required: true
 
 jobs:
   run_docker_via_ssh:
@@ -42,7 +43,3 @@ jobs:
 
               # stop ssh session (complete workflow step)
               exit
-
-    env:
-      SLACK_WEBHOOK_URL: ${{ secrets.GROEP_2_SLACK_WEBHOOK }}
-      SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK"
