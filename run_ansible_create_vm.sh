@@ -1,10 +1,23 @@
-ansible_install() {
+ansible_do_install() {
     # debian 12 ansible install
 
     pip install ansible[azure]
     pip install packaging
     ansible-galaxy collection install azure.azcollection --force
     pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
+}
+
+ansible_install () {
+  ansible-playbook
+
+  # if ansible not found (exit code 127), do install
+  if [ $? -eq 127 ]; then
+    echo "[*] installing ansible"
+    ansible_do_install
+    echo "[+] installed ansible"
+  else
+    echo "[+] ansible installation found"
+  fi
 }
 
 azure_login() {
