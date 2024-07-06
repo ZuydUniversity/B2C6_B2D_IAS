@@ -27,4 +27,4 @@ jobs:
           with:
             context: .
             push: true
-            tags: ${{secrets.GROEP_2_DOCKERHUB_USERNAME}}/${{inputs.GROEP_2_DOCKERHUB_REPO}}:latest
+            tags: ${{secrets.GROEP_2_DOCKERHUB_USERNAME}}/${{secrets.GROEP_2_DOCKERHUB_REPO}}:latest
