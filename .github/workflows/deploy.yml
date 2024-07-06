@@ -2,7 +2,15 @@ name: deploy
 
 on:
   workflow_call:
-
+    secrets:
+      GROEP_2_DEPLOYMENT_VM_IP:
+        required: true
+      GROEP_2_DEPLOYMENT_VM_USER:
+        required: true
+      GROEP_2_DEPLOYMENT_VM_PASSWORD:
+        required: true
+      GROEP_2_SLACK_WEBHOOK:
+        required: true
 
 jobs:
   deploy:
