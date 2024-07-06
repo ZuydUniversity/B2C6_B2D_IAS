@@ -12,7 +12,6 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-20.04
-    if: ${{ always() }}
     steps:
       - uses: slackapi/slack-github-action@v1.26.0
         with:
