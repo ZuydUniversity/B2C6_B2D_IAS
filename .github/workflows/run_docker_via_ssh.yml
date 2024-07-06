@@ -5,7 +5,7 @@ on:
   
 env:
   LOCAL_DIST: "/tmp/dist"
-  REMOTE_HOST: "98.71.161.86"
+  REMOTE_HOST: "4.180.53.191"
   REMOTE_USER: "azureuser" 
   REMOTE_PASSWORD: "92ijetWDPi3yU4KkcUakuDmHZP6DLgps948KETSJuTmxNLurJxw7bRg4nMTtkqmqrW9VKubc"
 

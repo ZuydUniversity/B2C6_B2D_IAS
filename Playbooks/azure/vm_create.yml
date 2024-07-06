@@ -33,7 +33,7 @@
       azure_rm_publicipaddress:
         resource_group: "{{ resgroup_name }}"
         allocation_method: Static
-        name: groep2-vm-ip
+        name: groep2-vm-ip-1
       register: output_ip_address
 
     - name: Create Network Security Group that allows SSH and HTTP
@@ -63,24 +63,24 @@
     - name: Create virtual network interface card
       azure_rm_networkinterface:
         resource_group: "{{ resgroup_name }}"
-        name: groep2-vm-vnic
+        name: groep2-vm-vnic-1
         virtual_network: groep2-vnet
         subnet: groep2-vnet-subnet
         security_group: groep2-netsecgroup
         # public_ip_name: groep2-vm-ip
         ip_configurations:
           - name: groep2-vm-ipconf
-            public_ip_address_name: groep2-vm-ip
+            public_ip_address_name: groep2-vm-ip-1
 
     - name: Create VM
       azure_rm_virtualmachine:
         resource_group: "{{ resgroup_name }}"
-        name: groep2-vm
+        name: groep2-vm-1
         vm_size: Standard_B1s
         admin_username: "{{ vm_user_name }}"
         admin_password: "{{ vm_user_password }}"
         ssh_password_enabled: true
-        network_interfaces: groep2-vm-vnic
+        network_interfaces: groep2-vm-vnic-1
         image:
           publisher: Debian
           offer: debian-12
