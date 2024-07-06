@@ -5,6 +5,8 @@ on:
     secrets:
       SLACK_WEBHOOK_URL:
         required: true
+    inputs:
+      SLACK_WEBHOOK_TEXT:
 
 jobs:
   notify:
@@ -16,13 +18,13 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": ${{SLACK_WEBHOOK_TEXT}},
+              "text": ${{inputs.SLACK_WEBHOOK_TEXT}},
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ${{SLACK_WEBHOOK_TEXT}}
+                    "text": ${{inputs.SLACK_WEBHOOK_TEXT}}
                   }
                 }
               ]
