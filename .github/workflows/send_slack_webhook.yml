@@ -7,6 +7,7 @@ on:
         required: true
     inputs:
       SLACK_WEBHOOK_TEXT:
+        type: string
 
 jobs:
   notify:
