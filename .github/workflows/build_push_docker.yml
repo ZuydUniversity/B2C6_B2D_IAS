@@ -7,8 +7,6 @@ on:
         required: true
       GROEP_2_DOCKERHUB_TOKEN:
         required: true
-      GROEP_2_DOCKERHUB_REPO_NAME:
-        required: true
     inputs:
       DOCKERHUB_REPO_NAME:
         type: string
