@@ -27,6 +27,7 @@ jobs:
             username: ${{ env.REMOTE_USER }}
             password: ${{ env.REMOTE_PASSWORD }}
             script: |
+              sudo apt update
               sudo apt install git -y
 
               git clone https://github.com/ZuydUniversity/B2C6_B2D_IAS --depth 1 --branch groep-2
