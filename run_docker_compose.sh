@@ -36,8 +36,10 @@ function docker_install {
 
 # build & run containers in background
 function docker_compose_run {
-  echo "[*] running docker compose"
-  sudo docker compose up --build --detach
+  echo "[*] starting/updating docker containers"
+  
+  sudo docker compose pull
+  sudo docker compose up --build --detach --force-recreate
 }
 
 docker_install
