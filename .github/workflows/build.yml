@@ -1,0 +1,27 @@
+name: build       
+
+on:
+  workflow_call:
+    secrets:
+      GROEP_2_SLACK_WEBHOOK:
+        required: true
+      GROEP_2_DOCKERHUB_USERNAME:
+        required: true
+      GROEP_2_DOCKERHUB_TOKEN:
+        required: true
+      GROEP_2_DOCKERHUB_REPO:
+        required: true
+
+jobs:
+  build:
+    uses: ./.github/workflows/build_push_docker.yml
+    secrets: inherit
+
+  build-fail-notify:
+    needs: build
+    if: ${{ failure() }}
+    uses:
+      ZuydUniversity/B2C6_B2D_IAS/.github/workflows/send_slack_webhook.yml@groep-2
+    secrets: inherit
+    with:
+      SLACK_WEBHOOK_TEXT: ":rotating_light: [BACKEND] build: FAILED, commit info: <${{ github.event.pull_request.html_url || github.event.head_commit.url }}|url>, workflow info: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|url> :rotating_light:"
