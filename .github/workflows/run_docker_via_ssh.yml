@@ -2,7 +2,6 @@ name: run_docker_via_ssh
 
 on:
   workflow_call:
-  push:
   
 env:
   LOCAL_DIST: "/tmp/dist"
