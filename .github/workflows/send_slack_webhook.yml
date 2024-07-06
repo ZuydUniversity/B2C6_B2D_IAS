@@ -18,13 +18,13 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": ${{inputs.SLACK_WEBHOOK_TEXT}},
+              "text": "${{inputs.SLACK_WEBHOOK_TEXT}}",
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ${{inputs.SLACK_WEBHOOK_TEXT}}
+                    "text": "${{inputs.SLACK_WEBHOOK_TEXT}}"
                   }
                 }
               ]
