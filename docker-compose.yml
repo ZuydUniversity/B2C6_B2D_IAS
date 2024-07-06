@@ -9,14 +9,14 @@ services:
       - "frontend"
   frontend:
     hostname: "frontend.local"
-    build: https://github.com/ZuydUniversity/B2C6_B2D_Frontend.git#groep-2
+    image: mutate8694/frontend:latest
     depends_on:
       - "backend"
     environment:
       - NEXT_PUBLIC_BACKEND_BASE_URL=http://localhost:1234
   backend:
     hostname: "backend.local"
-    build: https://github.com/ZuydUniversity/B2C6_B2D_Backend.git#Groep-2
+    image: mutate8694/backend:latest
     restart: always  # fix when mariadb hasn't started listening and backend crashes
     depends_on:
       - "mariadb"
