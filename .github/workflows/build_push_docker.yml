@@ -3,12 +3,15 @@ name: build_push_docker
 on:
   workflow_call:
     secrets:
-      DOCKERHUB_USERNAME:
+      GROEP_2_DOCKERHUB_USERNAME:
         required: true
-      DOCKERHUB_TOKEN:
+      GROEP_2_DOCKERHUB_TOKEN:
         required: true
+      GROEP_2_DOCKERHUB_REPO_NAME:
+        required: true
+    inputs:
       DOCKERHUB_REPO_NAME:
-        required: true
+        type: string
 
 jobs:
   build_push_docker:
@@ -19,12 +22,12 @@ jobs:
         
         - uses: docker/login-action@v3
           with:
-            username: ${{secrets.DOCKERHUB_USERNAME}}
-            password: ${{secrets.DOCKERHUB_TOKEN}}
+            username: ${{secrets.GROEP_2_DOCKERHUB_USERNAME}}
+            password: ${{secrets.GROEP_2_DOCKERHUB_TOKEN}}
 
         # push built container to dockerhub
         - uses: docker/build-push-action@v5
           with:
             context: .
             push: true
-            tags: ${{secrets.DOCKERHUB_USERNAME}}/${{secrets.DOCKERHUB_REPO_NAME}}:latest
+            tags: ${{secrets.GROEP_2_DOCKERHUB_USERNAME}}/${{inputs.DOCKERHUB_REPO_NAME}}:latest
