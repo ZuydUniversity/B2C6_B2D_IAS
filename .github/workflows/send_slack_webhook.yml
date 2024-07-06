@@ -1,0 +1,32 @@
+name: main
+
+on:
+  workflow_call:
+    secrets:
+      SLACK_WEBHOOK_URL:
+        required: true
+
+jobs:
+  notify:
+    runs-on: ubuntu-20.04
+    if: ${{ always() }}
+    steps:
+      - uses: slackapi/slack-github-action@v1.26.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "text": ${{SLACK_WEBHOOK_TEXT}},
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": ${{SLACK_WEBHOOK_TEXT}}
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
