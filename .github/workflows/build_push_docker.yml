@@ -7,9 +7,8 @@ on:
         required: true
       GROEP_2_DOCKERHUB_TOKEN:
         required: true
-    inputs:
-      DOCKERHUB_REPO_NAME:
-        type: string
+      GROEP_2_DOCKERHUB_REPO:
+        required: true
 
 jobs:
   build_push_docker:
@@ -28,4 +27,4 @@ jobs:
           with:
             context: .
             push: true
-            tags: ${{secrets.GROEP_2_DOCKERHUB_USERNAME}}/${{inputs.DOCKERHUB_REPO_NAME}}:latest
+            tags: ${{secrets.GROEP_2_DOCKERHUB_USERNAME}}/${{inputs.GROEP_2_DOCKERHUB_REPO}}:latest
