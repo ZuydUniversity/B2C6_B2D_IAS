@@ -1,4 +1,4 @@
-name: main
+name: send_slack_webhook
 
 on:
   workflow_call:
