@@ -3,15 +3,12 @@
 name: CI
 
 # Controls when the workflow will run
-#on:
-  #push:
-    #branches: [ "groep_3_B2D" ]
-  #pull_request:
-    #branches: ["groep_3_B2D"]
 on:
   push:
-    branches:
-      - "main"
+    branches: [ "groep_3_B2D" ]
+  pull_request:
+    branches: ["groep_3_B2D"]
+
 
 
 
@@ -46,15 +43,12 @@ jobs:
       - name: Create VMs
         run: |
           mkdir -p ~/.ssh
-          cd playbook/
+          cd Playbook/
           ansible-playbook create_vm.yml
         env:
           VM_PASSWORD: ${{ secrets.VM_PASSWORD }}
 
-      - name: Configure VMs
-        run: |
-          cd playbook/
-          ansible-playbook configure_vm.yml
+
         #- name: Configure_VMs
          # run: |
           #cd Playbook/
