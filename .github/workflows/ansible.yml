@@ -3,11 +3,16 @@
 name: CI
 
 # Controls when the workflow will run
+#on:
+  #push:
+    #branches: [ "groep_3_B2D" ]
+  #pull_request:
+    #branches: ["groep_3_B2D"]
 on:
   push:
-    branches: [ "groep_3_B2D" ]
-  pull_request:
-    branches: ["groep_3_B2D"]
+    branches:
+      - "main"
+
 
 
   # Allows you to run this workflow manually from the Actions tab
@@ -15,46 +20,41 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-        # Python is nodig om ansible te runnen
-      - name: python setup
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-          
-        # Ansible installeren
+
       - name: Install Ansible
         run: |
           pip install ansible
           ansible-galaxy collection install azure.azcollection --force
 
-      - name: print files
-        run: |
-          sudo apt-get install tree
-          tree /home/runner/.ansible/collections/ansible_collections/azure/azcollection
-          
-        #
       - name: Install Azure Collection requirements
         run: pip install -r ~/.ansible/collections/ansible_collections/azure/azcollection/requirements.txt
-      
-      - name: Azure Login 
-        run: az login --service-principal --username 8cf2ed0e-9a0f-4fb5-aaa7-9514f4f8848a --password pk28Q~RWw7qOUdOTxzOGRWAQjvdWW-e.~RKGGbkz --tenant 586e785a-8271-4fc6-a0c4-59fec8a68975
 
-   #   - name: Create VMsssss
-   #     run: |
-    #      mkdir /home/runner/.ssh
-     #     cd Playbook/
-     #     ansible-playbook create_vm.yml
+      - name: Azure Login
+        run: az login --service-principal --username ${{ secrets.AZURE_USERNAME }} --password ${{ secrets.AZURE_PASSWORD }} --tenant ${{ secrets.TENANT_ID }}
 
+      - name: Create VMs
+        run: |
+          mkdir -p ~/.ssh
+          cd playbook/
+          ansible-playbook create_vm.yml
+        env:
+          VM_PASSWORD: ${{ secrets.VM_PASSWORD }}
+
+      - name: Configure VMs
+        run: |
+          cd playbook/
+          ansible-playbook configure_vm.yml
         #- name: Configure_VMs
          # run: |
           #cd Playbook/
