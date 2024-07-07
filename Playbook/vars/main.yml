@@ -1,11 +1,11 @@
-# VASTE VARIABELEN!!!!
 number_of_vms: 1
-vm_base_name: Groep3B2D
+vm_base_name: Groep3B2DAuto
 location: westeurope
 resource_group_name: B2C6D
 virtual_network_name: "{{ resource_group_name }}-vnet"
 subnet_name: "vm-subnet"
 admin_username: b2c6d
+admin_password: "{{ lookup('env', 'VM_PASSWORD') }}"
 key_path: "~/.ssh/"
 key_name: "ansible_key.pem"
-dns_zone: b2dgroep3 # dnszone.westeurope.cloudapp.azure.com
+dns_zone: b2dgroep3
