@@ -1,58 +1,34 @@
 - name: Create VMs in Azure
-
   hosts: localhost
-
   collections:
     - azure.azcollection
-
   vars_files:
     - vars/main.yml
 
   tasks:
-    - name: Generate RSA key pair
-      openssh_keypair:
-        path: "{{ key_path }}{{ item }}"
-        type: ed25519
-        size: 4096
-        state: present
-      with_items:
-        - "{{key_name}}"
-
-    - name: Read the contents of the public key
-      set_fact:
-        public_key_content: "{{ lookup('file', '{{ key_path }}{{key_name}}.pub') }}"
-
-    - name: Print public key
-      debug:
-        msg: "Generated public key: {{ public_key_content }}"
-
-    - name: Read the contents of the private key
-      set_fact:
-        private_key_content: "{{ lookup('file', '{{ key_path }}{{key_name}}') }}"
-
-    - name: Print private key
-      debug:
-        msg: "Generated private key: {{ private_key_content }}"
-
+    # Create a resource group
     - name: Create a resource group
       azure_rm_resourcegroup:
         name: "{{ resource_group_name }}"
         location: "{{ location }}"
 
+    # Create a virtual network
     - name: Create a virtual network
       azure_rm_virtualnetwork:
         resource_group: "{{ resource_group_name }}"
-        name: "{{ virtual_network_name}}"
+        name: "{{ virtual_network_name }}"
         address_prefixes: 10.0.0.0/16
 
+    # Create a subnet
     - name: Create a subnet
       register: output_subnet
       azure_rm_subnet:
         resource_group: "{{ resource_group_name }}"
-        name: "{{ subnet_name}}"
+        name: "{{ subnet_name }}"
         address_prefix: 10.0.1.0/24
-        virtual_network: "{{ virtual_network_name}}"
+        virtual_network: "{{ virtual_network_name }}"
 
+    # Create public IP addresses
     - name: Create public IP addresses
       loop: "{{ range(1, number_of_vms + 1) | list }}"
       loop_control:
@@ -65,16 +41,18 @@
         name: "{{ vm_base_name }}{{ vm_number }}-public-IP"
         domain_name_label: "{{ vm_base_name | lower }}{{ vm_number }}-{{ dns_zone }}"
 
+    # Print generated IP addresses
     - name: Print generated IP addresses
       loop: "{{ output_ip_addresses.results }}"
       debug:
         msg: "Generated IP address: {{ item.state.ip_address }}"
 
+    # Create Network Security Group that allows SSH, HTTP, and HTTPS
     - name: Create Network Security Group that allows SSH
       azure_rm_securitygroup:
         resource_group: "{{ resource_group_name }}"
         name: "{{ resource_group_name }}-VM-SecurityGroup"
-        rules: # TODO add specific ports for each service
+        rules:
           - name: SSH
             protocol: Tcp
             destination_port_range: 22
@@ -94,6 +72,7 @@
             priority: 1020
             direction: Inbound
 
+    # Create network interfaces
     - name: Create network interfaces
       loop: "{{ range(1, number_of_vms + 1) | list }}"
       loop_control:
@@ -101,31 +80,27 @@
       azure_rm_networkinterface:
         resource_group: "{{ resource_group_name }}"
         name: "{{ vm_base_name }}{{ vm_number }}-Nic"
-        virtual_network: "{{ virtual_network_name}}"
-        subnet: "{{ subnet_name}}"
+        virtual_network: "{{ virtual_network_name }}"
+        subnet: "{{ subnet_name }}"
         security_group: "{{ resource_group_name }}-VM-SecurityGroup"
         ip_configurations:
           - name: ipconfig1
             public_ip_address_name: "{{ vm_base_name }}{{ vm_number }}-public-IP"
 
-    - name: Create multiple virtual machines
-      loop: "{{ range(1, number_of_vms + 1) | list }}"
-      loop_control:
-        loop_var: vm_number
-      azure_rm_virtualmachine:
-        resource_group: "{{ resource_group_name }}"
-        name: "{{ vm_base_name }}{{ vm_number }}"
-        vm_size: Standard_B1s
-        admin_username: "{{ admin_username }}"
-        ssh_password_enabled: false
-        ssh_public_keys:
-          - path: /home/{{ admin_username }}/.ssh/authorized_keys
-            key_data: "{{ public_key_content }}"
-        image:
-          offer: 0001-com-ubuntu-minimal-jammy
-          publisher: Canonical
-          sku: minimal-22_04-lts-gen2
-          version: latest
-        network_interfaces:
-          - name: "{{ vm_base_name }}{{ vm_number }}-Nic"
-        managed_disk_type: Standard_LRS
+    # Create virtual machine
+    - name: Create a virtual machine
+  azure_rm_virtualmachine:
+    resource_group: "{{ resource_group_name }}"
+    name: "{{ vm_base_name }}1"
+    vm_size: Standard_B1s
+    admin_username: "{{ admin_username }}"
+    admin_password: "{{ admin_password }}"  
+    ssh_password_enabled: true
+    image:
+      offer: 0001-com-ubuntu-minimal-jammy
+      publisher: Canonical
+      sku: minimal-22_04-lts-gen2
+      version: latest
+    network_interfaces:
+      - name: "{{ vm_base_name }}1-Nic"
+    managed_disk_type: Standard_LRS
