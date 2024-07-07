@@ -12,8 +12,6 @@ services:
     image: mutate8694/frontend:latest
     depends_on:
       - "backend"
-    environment:
-      - NEXT_PUBLIC_BACKEND_BASE_URL=http://localhost:1234
   backend:
     hostname: "backend.local"
     image: mutate8694/backend:latest
